@@ -1,25 +1,22 @@
 export interface SearchResponseState {
   isLoading: boolean;
-  movies: Movie | object;
   error: string | "";
-  currentPage: number | 1;
+  response: any;
 }
 
+export interface Movie {
+  id: number;
+  title: string;
+  releaseDate: string;
+}
 export interface MovieState {
-  movies: SearchResponseState;
+  searchResponse: SearchResponseState;
   query: QueryState;
   page: PaginationState;
 }
-interface Movie {
-  [key: string]: string;
-}
 
-export interface QueryState {
-  query: string;
-}
-export interface PaginationState {
-  currentPage: number;
-}
+export type QueryState = string;
+export type PaginationState = number;
 
 export enum MovieActionTypes {
   FETCH_MOVIES_REQUEST = "@@MOVIE/FETCH_MOVIES_REQUEST",
@@ -27,5 +24,6 @@ export enum MovieActionTypes {
   FETCH_MOVIES_ERROR = "@@MOVIE/FETCH_MOVIES_ERROR",
   SET_MOVIE_QUERY = "@@MOVIE/SET_MOVIE_QUERY",
   CLEAR_MOVIE_QUERY = "@@MOVIE/CLEAR_MOVIE_QUERY",
-  SET_CURRENT_PAGE = "@@MOVIE/SET_CURRENT_PAGE"
+  SET_CURRENT_PAGE = "@@MOVIE/SET_CURRENT_PAGE",
+  GET_NEW_PAGE = "@@MOVIE/GET_NEW_PAGE"
 }

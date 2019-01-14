@@ -1,6 +1,9 @@
-import { all } from "redux-saga/effects";
-import { movieAPIWatchFetchMovieBySearchString } from "../movies/sagas";
+import { all, fork } from "redux-saga/effects";
+import {
+  movieAPIWatchFetchMovieBySearchString,
+  watchGetNewPage
+} from "../movies/sagas";
 
 export default function* rootSaga() {
-  yield all([movieAPIWatchFetchMovieBySearchString()]);
+  yield all([movieAPIWatchFetchMovieBySearchString, watchGetNewPage].map(fork));
 }

@@ -1,70 +1,89 @@
-import React, { Component } from "react";
-import Paper from "@material-ui/core/Paper";
-import { Column } from "@devexpress/dx-react-grid";
-import {
-  Grid,
-  Table,
-  TableHeaderRow
-} from "@devexpress/dx-react-grid-material-ui";
+import React from "react";
+import ReactTable from "react-table";
+import MoviePaginationButton from "./MoviePaginationButton";
+import { Movie, PaginationState, QueryState } from "./../types";
+import { sortBy } from "lodash";
 
-/*
-  @todo: Create releaseDate type
-*/
-interface GridRow {
-  title: string;
-  releaseDate: string;
-  summary: string;
-  id: number;
+interface Props {
+  movieArray: Movie[];
+  page: PaginationState;
+  query: QueryState;
+  isLoading: boolean;
+  paginationInfo: {
+    page: number;
+    maxPage: number;
+    totalResults: number;
+    canNext: boolean;
+    canPrevious: boolean;
+  };
+  getNewPage: (query: string, page: number) => void;
 }
 
-const rows: GridRow[] = [
-  {
-    id: 1,
-    title: "Test",
-    releaseDate: Date.now().toString(),
-    summary: "Lorem Ipsum Dolor"
-  },
-  {
-    id: 2,
-    title: "Test2",
-    releaseDate: Date.now().toString(),
-    summary: "Lorem Ipsum Dolor"
-  },
-  {
-    id: 3,
-    title: "Test3",
-    releaseDate: Date.now().toString(),
-    summary: "Lorem Ipsum Dolor"
-  },
-  {
-    id: 4,
-    title: "Test4",
-    releaseDate: Date.now().toString(),
-    summary: "Lorem Ipsum Dolor"
+class MovieTable extends React.Component<Props, {}> {
+  constructor(props: any) {
+    super(props);
+    this.paginationClick = this.paginationClick.bind(this);
   }
-];
 
-const columns: Column[] = [
-  {
-    name: "title",
-    title: "Title"
-  },
-  {
-    name: "releaseDate",
-    title: "Release Date"
-  },
-  { name: "summary", title: "Summary" }
-];
-
-export default class MovieTable extends Component<{}, {}> {
+  paginationClick(page: number) {
+    this.props.getNewPage(this.props.query, page);
+  }
   render() {
     return (
-      <Paper>
-        <Grid rows={rows} columns={columns}>
-          <Table />
-          <TableHeaderRow />
-        </Grid>
-      </Paper>
+      <ReactTable
+        data={this.props.movieArray}
+        resolveData={(data) => {
+          return sortBy(data, "title");
+        }}
+        style={{ tr: { minHeight: "200px" } }}
+        page={this.props.page - 1}
+        className='-striped -highlight'
+        onPageChange={(page) => {
+          this.setState({ page });
+        }}
+        loading={this.props.isLoading}
+        sortable={false}
+        manual={true}
+        pages={this.props.paginationInfo.maxPage}
+        noDataText={"No Movies Found."}
+        columns={[
+          {
+            Header: "Title",
+            accessor: "title",
+            style: { alignSelf: "center" }
+          },
+          {
+            Header: "Release Date",
+            accessor: "release_date",
+            style: { alignSelf: "center" }
+          },
+          {
+            accessor: "overview",
+            Header: "Summary",
+            style: { alignSelf: "center", whiteSpace: "unset" }
+          }
+        ]}
+        showPageSizeOptions={false}
+        defaultSorted={[{ id: "title", asc: true }]}
+        NextComponent={() => (
+          <MoviePaginationButton
+            clickHandler={this.paginationClick}
+            buttonText={"Next"}
+            canNext={this.props.paginationInfo.canNext}
+            currentPage={this.props.page}
+          />
+        )}
+        PreviousComponent={() => (
+          <MoviePaginationButton
+            clickHandler={this.paginationClick}
+            canPrevious={this.props.paginationInfo.canPrevious}
+            buttonText={"Previous"}
+            currentPage={this.props.page}
+          />
+        )}
+      />
     );
   }
 }
+
+export default MovieTable;

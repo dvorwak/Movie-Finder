@@ -10,12 +10,13 @@ import {
   Theme
 } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import Search from "../movies/components/Search";
+import SearchContainer from "../movies/containers/SearchContainer";
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: "100%"
+      width: "100%",
+      padding: "5px"
     },
     grow: {
       flexGrow: 1
@@ -85,7 +86,7 @@ const Header = (props: Props) => {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <Search />
+            <SearchContainer />
           </div>
         </Toolbar>
       </AppBar>

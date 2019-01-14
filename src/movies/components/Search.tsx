@@ -6,6 +6,7 @@ import {
   WithStyles,
   Theme
 } from "@material-ui/core";
+import { debounce } from "lodash";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -34,18 +35,26 @@ interface Props extends WithStyles<typeof styles> {
     inputInput: string;
     inputRoot: string;
   };
+  handleSearch: (currentText: string, query: string) => void;
+  query: string;
 }
 
-class Search extends React.Component<Props, {}> {
+class Search extends React.Component<any | Props, {}> {
+  constructor(props: any) {
+    super(props);
+    this.localHandleSearch = debounce(this.localHandleSearch, 500);
+  }
+  localHandleSearch(value: string, query: string) {
+    return this.props.handleSearch(value, query);
+  }
   render() {
-    const { classes } = this.props;
+    const { classes, query } = this.props;
+
     return (
       <InputBase
         placeholder='Search…'
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput
-        }}
+        classes={{ root: classes.inputRoot, input: classes.inputInput }}
+        onChange={(e) => this.localHandleSearch(e.target.value, query)}
       />
     );
   }

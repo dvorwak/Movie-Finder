@@ -1,0 +1,23 @@
+.ReactTable .rt-resizable-header-content {
+  font-size: 25px;
+  font-weight: bold;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  margin-left: 20px;
+  text-align: left;
+}
+
+.ReactTable .rt-thead .rt-th.-sort-asc {
+  box-shadow: none;
+}
+
+.ReactTable .rt-tr {
+  min-height: 65px;
+}
+
+.ReactTable .rt-td {
+  margin-left: 20px;
+}
+
+.ReactTable .rt-tr .rt-td:nth-last-of-type(1) {
+  margin-right: 20px;
+}

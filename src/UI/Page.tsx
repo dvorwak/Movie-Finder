@@ -16,6 +16,7 @@ const styles = (theme: Theme) =>
       }
     },
     layout: {
+      padding: "5px",
       flexGrow: 1
     }
   });
